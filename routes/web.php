@@ -4,13 +4,20 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ThreadController;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
 
 Route::get('/', [JobController::class, 'index'])->name('index');
 
 // Group with 'auth' and 'verified' middleware
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('myprofile' , function (){
-        return view('profile.dashboard');
+    Route::get('{name}' , function ($name){
+        try {
+            $user = User::where('name', $name)->firstOrFail();
+
+            return view('profile.dashboard', ['user' => $user]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return abort(404);
+        }
     });
 
     Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');

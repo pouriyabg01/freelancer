@@ -62,7 +62,7 @@
     <div class="profile-card card">
         <img src="assets/user.png" alt="User Avatar" class="profile-avatar"> <!-- Placeholder flat image -->
         <div class="profile-details">
-            <h5 class="card-title">John Doe</h5>
+            <h5 class="card-title">{{ $user->name }}</h5>
             <p class="card-text">Web Developer</p>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Email: john@example.com</li>
@@ -71,11 +71,9 @@
             <div class="skill-list">
                 <strong>Skills:</strong>
                 <ul>
-                    <li>HTML</li>
-                    <li>CSS</li>
-                    <li>JavaScript</li>
-                    <li>PHP</li>
-                    <li>React</li>
+                    @foreach(\App\Models\Skill::whereIn('id' , $user->skill()->pluck('skill_id'))->get() as $skill)
+                        <li>{{ $skill->name }}</li>
+                    @endforeach
                 </ul>
             </div>
         </div>

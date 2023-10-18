@@ -20,7 +20,7 @@ class ProfileController extends Controller
         return view('profile.edit', [
             'user' => $request->user(),
             'skills' => Skill::all(),
-            'userSkill' => $request->user()->skill
+            'userSkill' => array_values($request->user()->skill()->pluck('skill_id')->toArray())
         ]);
     }
 
@@ -38,7 +38,7 @@ class ProfileController extends Controller
         $request->user()->save();
 
         if ($request->skill){
-            $request->user()->skill()->attach(array_values($request->skill));
+            $request->user()->skill()->sync(array_values($request->skill));
         }
 
 

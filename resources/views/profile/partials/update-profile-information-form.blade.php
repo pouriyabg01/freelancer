@@ -1,4 +1,3 @@
-{{ dd($userSkill) }}
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
@@ -27,7 +26,7 @@
         <div>
             <select multiple id="skill" name="skill[]" class="form-select mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:ring focus:ring-indigo-200 dark:focus:ring-offset-gray-800 focus:ring-opacity-50">
                 @foreach($skills as $skill)
-                    <option value="{{ $skill->id }}" >{{ $skill->name }}</option>
+                    <option value="{{ $skill->id }}" @if(in_array($skill->id , $userSkill)) selected @endif>{{ $skill->name }}</option>
                 @endforeach
             </select>
 
