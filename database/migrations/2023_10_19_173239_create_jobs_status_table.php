@@ -6,26 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up():void
     {
-        Schema::create('favorites', function (Blueprint $table) {
+        Schema::create('jobs_status', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('job_id');
+            $table->enum('status', ['complete', 'in_working']);
+            $table->timestamp('status_date')->useCurrent()->default(now());
             $table->unique(['user_id' , 'job_id']);
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('job_id')->references('id')->on('jobs')->cascadeOnDelete();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down():void
     {
-        Schema::dropIfExists('favorites');
+        Schema::dropIfExists('jobs_status');
     }
 };

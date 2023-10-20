@@ -60,7 +60,7 @@
 <body>
 <div class="container mt-5">
     <div class="profile-card card">
-        <img src="assets/user.png" alt="User Avatar" class="profile-avatar"> <!-- Placeholder flat image -->
+        <img src="{{ asset('assets/user.png') }}" alt="User Avatar" class="profile-avatar"> <!-- Placeholder flat image -->
         <div class="profile-details">
             <h5 class="card-title">{{ $user->name }}</h5>
             <p class="card-text">Web Developer</p>
@@ -71,8 +71,8 @@
             <div class="skill-list">
                 <strong>Skills:</strong>
                 <ul>
-                    @foreach(\App\Models\Skill::whereIn('id' , $user->skill()->pluck('skill_id'))->get() as $skill)
-                        <li>{{ $skill->name }}</li>
+                    @foreach($user->skill()->pluck('name') as $skill)
+                        <li>{{ $skill }}</li>
                     @endforeach
                 </ul>
             </div>

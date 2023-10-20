@@ -7,10 +7,10 @@
 
     <hr>
 
-    @if(count($Thread->message) > 0)
+    @if(count($Thread->messages) > 0)
 
         <table>
-            @foreach($Thread->message as $Message)
+            @foreach($Thread->messages as $Message)
                 <tr>
                     <th style="padding-right: 10px;">{{$Message->user->name}}</th>
                     <td class="dark:text-white">{{$Message->message}}</td>

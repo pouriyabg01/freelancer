@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Thread extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+
 
     protected $fillable = ['job_id'];
 
-    public function user()
+    public function users()
     {
         return $this->belongsToMany(User::class);
     }
@@ -21,7 +23,7 @@ class Thread extends Model
         return $this->belongsTo(Job::class);
     }
 
-    public function message()
+    public function messages()
     {
         return $this->hasMany(Message::class);
     }

@@ -17,6 +17,16 @@
             <x-input-error :messages="$errors->get('description')" class="mt-1" />
         </div>
 
+        <!-- category -->
+        <div class="mt-4">
+            <x-input-label for="category" :value="__('Category')" />
+            <select multiple id="category" name="category[]" class="form-select mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:ring focus:ring-indigo-200 dark:focus:ring-offset-gray-800 focus:ring-opacity-50">
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}" @if(in_array($category->id , $jobCategory)) selected @endif>{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
 
         <!-- budget -->
         <div class="mt-4">
@@ -24,6 +34,7 @@
             <x-text-input id="budget" class="block mt-1 w-full" type="number" name="budget" :value="$job->budget" required autocomplete="budget" />
             <x-input-error :messages="$errors->get('budget')" class="mt-2" />
         </div>
+
 
 
 

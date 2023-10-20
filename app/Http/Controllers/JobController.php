@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Job;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,19 +13,27 @@ use Illuminate\Support\Facades\Validator;
 
 class JobController extends Controller
 {
+    public function search(Request $request)
+    {
+        $search = $request->validate([
+            'search' => 'required|string'
+        ])['search'];
+        $jobs = Job::where('title' , 'like' , "%$search%")->get();
+        return view('index' , compact('jobs'));
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $jobs = Job::all();
-        return view('jobs.index' , compact('jobs'));
+        return view('index' , compact('jobs'));
     }
 
     public function userJob()
     {
         $user = Auth::user();
-        $jobs = $user->job;
+        $jobs = $user->jobs;
         return view('jobs.index' , compact('jobs'));
     }
 
@@ -33,7 +42,8 @@ class JobController extends Controller
      */
     public function create()
     {
-        return view('jobs.create');
+        $categories = Category::all();
+        return view('jobs.create' , compact('categories'));
     }
 
     /**
@@ -42,8 +52,11 @@ class JobController extends Controller
     public function store(jobRequest $request)
     {
         $user = Auth::user();
+        $job = $user->jobs()->create($request->all());
 
-        $user->job()->create($request->all());
+        if ($request->category)
+            $job->category()->attach(array_values($request->category));
+
         return redirect('myjobs');
     }
 
@@ -52,14 +65,14 @@ class JobController extends Controller
      */
     public function show($id)
     {
-        $job = Job::findOrFail($id);
+        $job = Job::find($id);
         $User = Auth::user();
 
         if (Auth::check()) {
             switch ($User->roleIs()) {
                 case 'freelancer':
                     $Threads = array();
-                    $Threadss = $User->thread()->where('job_id', $job->id)->first();
+                    $Threadss = $User->threads()->where('job_id', $job->id)->first();
                     if (is_null($Threadss)) {
                         $Threads = false;
                     } else {
@@ -70,7 +83,8 @@ class JobController extends Controller
                 case 'client':
 
                     $UserType = 'client';
-                    $Threads = $User->thread;
+                    $job = $User->jobs()->find($id);
+                    $Threads = $job->threads;
 
                     break;
                 default:
@@ -78,7 +92,7 @@ class JobController extends Controller
                     $Threads = array();
                     break;
             }
-            $data = ['job'  => $job , 'UserType' => $UserType , 'Threads' => $Threads];
+            $data = ['User' => $User , 'UserType' => $UserType , 'job'  => $job , 'Threads' => $Threads];
 
         }else{
             $data = ['job' =>$job];
@@ -93,13 +107,15 @@ class JobController extends Controller
     public function edit(string $id)
     {
         $job = Job::findOrFail($id);
-        return view('jobs.edit' , compact('job'));
+        $categories = Category::all();
+        $jobCategory = array_values($job->category()->pluck('category_id')->toArray());
+        return view('jobs.edit' , compact('job' , 'categories' , 'jobCategory'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Job $job)
     {
         Validator::make($request->all() ,[
             'user_id' => ['required','numeric'],
@@ -107,11 +123,13 @@ class JobController extends Controller
             'description' => ['required','string'],
             'budget' => ['required','numeric']
         ]);
-        Job::findOrFail($id)->update([
+        $job->update([
             'title' => $request->title,
             'description' =>$request->description,
             'budget' =>$request->budget,
         ]);
+        if ($request->category)
+            $job->category()->sync(array_values($request->category));
         return back();
     }
 

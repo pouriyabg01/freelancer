@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+
 
     protected $fillable = ['message' , 'user_id' , 'thread_id'];
 

@@ -4,8 +4,10 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use App\Models\Job;
+use App\Models\User;
 use App\Policies\JobPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,14 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::define('favorite-job' , function (User $user){
+            return $user->roleIs('freelancer');
+        });
+        Gate::define('send-message' , function (User $user){
+            return $user->roleIs('freelancer');
+        });
+        Gate::define('see-message' , function (User $user){
+            return $user->roleIs('client');
+        });
     }
 }

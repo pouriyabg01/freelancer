@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'role',
         'password',
@@ -51,24 +52,45 @@ class User extends Authenticatable
         return auth()->user()->role == $role;
     }
 
-    public function job(){
+    public function jobs(){
         return $this->hasMany(Job::class);
     }
 
-    public function favorite(){
-        return $this->hasMany(Favorite::class);
+    public function favorites(){
+        return $this->belongsToMany(Job::class , 'favorites');
     }
 
-    public function thread(){
+    public function addToFavorite(Job $job)
+    {
+        return $this->favorites()->attach($job->id);
+    }
+
+    public function removeFromFavorite(Job $job)
+    {
+        return $this->favorites()->detach($job->id);
+    }
+
+    public function favoriteJobs()
+    {
+        return $this->hasManyThrough(Job::class, Favorite::class, 'user_id', 'id', 'id', 'job_id');
+    }
+
+
+    public function threads(){
         return $this->belongsToMany(Thread::class);
     }
 
-    public function message(){
+    public function messages(){
         return $this->hasMany(Message::class);
     }
 
     public function skill()
     {
         return $this->belongsToMany(Skill::class, 'user_skill', 'user_id', 'skill_id');
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'username'; // Use the name field for route model binding
     }
 }

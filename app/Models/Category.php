@@ -5,16 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Skill extends Model
+class Category extends Model
 {
     use HasFactory;
-    public $timestamps = false;
 
     protected $fillable = ['name'];
+    public $timestamps = false;
 
-    public function user()
+    public function job()
     {
-        return $this->belongsToMany(User::class, 'user_skill', 'skill_id', 'user_id');
+        return $this->belongsToMany(Job::class , 'job_category' , 'category_id' , 'job_id');
     }
-
 }

@@ -24,8 +24,8 @@ class ThreadController extends Controller
 
         $Client = $Thread->Job->user;
 
-        $Thread->user()->save($Freelancer);
-        $Thread->user()->save($Client);
+        $Thread->users()->save($Freelancer);
+        $Thread->users()->save($Client);
 
         return redirect('/thread/'.$Thread->id);
 
@@ -41,7 +41,7 @@ class ThreadController extends Controller
 
         $User = Auth::user();
 
-        $User->message()->save($Message);
+        $User->messages()->save($Message);
 
         return redirect('/thread/'.$id);
 

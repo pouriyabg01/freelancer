@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('My Jobs') }}
+            {{ __('My Favorites Jobs') }}
         </h2>
     </x-slot>
 
@@ -32,7 +32,7 @@
                             <ul class="mt-4 text-gray-500 dark:text-gray-400 font-semibold">
                                 In Category :
                                 @foreach($job->category()->pluck('name') as $category)
-                                    <li class="text-sm">● {{ $category }}</li>
+                                    <li class="text-sm">{{ $category }}</li>
                                 @endforeach
                             </ul>
                             <p class="mt-4 text-gray-500 dark:text-gray-400 text-xl leading-relaxed text-right ">

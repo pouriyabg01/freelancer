@@ -12,11 +12,11 @@ class MenuController extends Controller
             $menu['dashboard'] = 'Dashboard';
             switch ($user->roleIs()) {
                 case 'freelancer' :
-                    $menu['profile/jobs/favorites'] = 'My Favorites';
+                    $menu['jobs.favorite'] = 'My Favorites';
                 break;
                 case 'client':
-                    $menu['myjobs'] = 'My Jobs';
-                    $menu['profile/jobs/create'] = 'Create Job';
+                    $menu['my.jobs'] = 'My Jobs';
+                    $menu['jobs.create'] = 'Create Job';
                 break;
                 default :
 

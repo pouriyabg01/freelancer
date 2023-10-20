@@ -24,12 +24,18 @@
         </div>
 
         <div>
+            <x-input-label for="username" :value="__('Username')" />
+            <x-text-input id="username" name="username" type="text" class="mt-1 block w-full" :value="old('username', $user->username)" autofocus autocomplete="username" />
+            <x-input-error class="mt-2" :messages="$errors->get('username')" />
+        </div>
+
+        <div>
+            <x-input-label for="skill" :value="__('Skill')" />
             <select multiple id="skill" name="skill[]" class="form-select mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:ring focus:ring-indigo-200 dark:focus:ring-offset-gray-800 focus:ring-opacity-50">
                 @foreach($skills as $skill)
                     <option value="{{ $skill->id }}" @if(in_array($skill->id , $userSkill)) selected @endif>{{ $skill->name }}</option>
                 @endforeach
             </select>
-
         </div>
 
         <div>
