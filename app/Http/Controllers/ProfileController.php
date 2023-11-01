@@ -14,6 +14,14 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+
+    public function messages()
+    {
+        $user = Auth::user();
+        $threads = $user->threads;
+        return view('jobs.messages' , compact('threads'));
+    }
+
     public function favorites()
     {
         $user = User::with('favoriteJobs')->find(Auth::user()->id);

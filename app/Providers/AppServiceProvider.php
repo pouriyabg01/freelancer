@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         view()->composer('*' , function ($view){
-           $userMenu = app(MenuController::class)->getUserMenu();
+           $userMenu = app(MenuController::class)->getMenu();
            $view->with(compact('userMenu'));
         });
     }

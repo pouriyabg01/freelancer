@@ -47,6 +47,12 @@ class ThreadController extends Controller
 
     }
 
+    public function destroy(Thread $thread)
+    {
+        $thread->delete();
+        return back();
+    }
+
     public function showThread($id){
         $Thread = Thread::findOrFail($id);
         return view('thread.show')->with('Thread',$Thread);
